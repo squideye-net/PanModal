@@ -173,6 +173,16 @@ public protocol PanModalPresentable: AnyObject {
      */
     var showDragIndicator: Bool { get }
 
+    
+    /**
+     Ask the delegate if the pan modal should be presented as 'modeless',
+     making the presenting view still interactable.  This cannot be changed
+     after presenting.
+
+     Default value is false.
+     */
+    var isModeless: Bool { get }
+    
     /**
      Asks the delegate if the pan modal should respond to the pan modal gesture recognizer.
      

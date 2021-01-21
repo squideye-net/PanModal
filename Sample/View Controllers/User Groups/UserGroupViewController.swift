@@ -89,6 +89,14 @@ class UserGroupViewController: UITableViewController, PanModalPresentable {
 
     // MARK: - Pan Modal Presentable
 
+    var isModeless: Bool {
+        return false
+    }
+    
+    var panModalBackgroundColor: UIColor {
+        return UIColor.black.withAlphaComponent(0.7)
+    }
+    
     var panScrollable: UIScrollView? {
         return tableView
     }

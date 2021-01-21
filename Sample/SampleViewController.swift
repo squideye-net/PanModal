@@ -71,6 +71,7 @@ private extension SampleViewController {
         case alert
         case transientAlert
         case userGroups
+        case modeless
         case stacked
         case navController
 
@@ -82,6 +83,7 @@ private extension SampleViewController {
             case .alert: return Alert()
             case .transientAlert: return TransientAlert()
             case .userGroups: return UserGroup()
+            case .modeless: return Modeless()
             case .stacked: return Stacked()
             case .navController: return Navigation()
             }
@@ -110,6 +112,11 @@ private extension SampleViewController {
         struct UserGroup: RowPresentable {
             let string: String = "User Groups"
             let rowVC: PanModalPresentable.LayoutType = UserGroupViewController()
+        }
+
+        struct Modeless: RowPresentable {
+            let string: String = "User Groups (Modeless)"
+            let rowVC: PanModalPresentable.LayoutType = UserGroupModelessViewController()
         }
 
         struct Navigation: RowPresentable {

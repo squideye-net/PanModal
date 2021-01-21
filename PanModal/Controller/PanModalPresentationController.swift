@@ -177,6 +177,9 @@ open class PanModalPresentationController: UIPresentationController {
         guard let containerView = containerView
             else { return }
 
+        if presentable?.isModeless ?? false {
+            includePassView(in: containerView, withPresentingView: self.presentingViewController.view)
+        }
         layoutBackgroundView(in: containerView)
         layoutPresentedView(in: containerView)
         configureScrollViewInsets()
@@ -344,8 +347,14 @@ private extension PanModalPresentationController {
          & PanModalPresentable, the presented view should be added to the container view
          in the presentation animator instead of here
          */
+        
         containerView.addSubview(presentedView)
-        containerView.addGestureRecognizer(panGestureRecognizer)
+        
+        if presentable.isModeless {
+            presentedView.addGestureRecognizer(panGestureRecognizer)
+        } else {
+            containerView.addGestureRecognizer(panGestureRecognizer)
+        }
 
         if presentable.showDragIndicator {
             addDragIndicatorView(to: presentedView)
@@ -402,6 +411,25 @@ private extension PanModalPresentationController {
         backgroundView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
         backgroundView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
         backgroundView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
+    }
+    
+    /**
+     Adds the background view to the view hierarchy
+     & configures its layout constraints.
+     */
+    func includePassView(in containerView: UIView, withPresentingView presentingView: UIView) {
+        let passView = PassView(presentingView: presentingView, frame: containerView.frame)
+        
+        containerView.addSubview(passView)
+        
+        passView.translatesAutoresizingMaskIntoConstraints = false
+        passView.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
+        passView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
+        passView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
+        passView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
+        
+        // touches must pass through to the PassView
+        backgroundView.isUserInteractionEnabled = false
     }
 
     /**
