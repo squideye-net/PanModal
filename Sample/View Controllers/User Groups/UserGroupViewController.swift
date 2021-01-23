@@ -93,6 +93,14 @@ class UserGroupViewController: UITableViewController, PanModalPresentable {
         return false
     }
     
+    func shouldTransition(to state: PanModalPresentationController.PresentationState) -> Bool {
+        return true;
+    }
+    
+    var isHapticFeedbackEnabled: Bool {
+        return true;
+    }
+    
     var panModalBackgroundColor: UIColor {
         return UIColor.black.withAlphaComponent(0.7)
     }
@@ -103,6 +111,10 @@ class UserGroupViewController: UITableViewController, PanModalPresentable {
 
     var shortFormHeight: PanModalHeight {
         return isShortFormEnabled ? .contentHeight(300.0) : longFormHeight
+    }
+    
+    var longFormHeight: PanModalHeight {
+        return .maxHeight
     }
 
     var scrollIndicatorInsets: UIEdgeInsets {
@@ -119,12 +131,31 @@ class UserGroupViewController: UITableViewController, PanModalPresentable {
         return headerView.frame.contains(location)
     }
 
-    func willTransition(to state: PanModalPresentationController.PresentationState) {
+    func willTransition(to state: PanModalPresentationController.PresentationState, on yPos: CGFloat) {
         guard isShortFormEnabled, case .longForm = state
             else { return }
 
-        isShortFormEnabled = false
+        //isShortFormEnabled = false
         panModalSetNeedsLayoutUpdate()
     }
-
+    
+    func didTransition(to state: PanModalPresentationController.PresentationState, on yPos: CGFloat) {
+        
+    }
+    
+    func shouldRespond(to panModalGestureRecognizer: UIPanGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    var allowsDragToDismiss: Bool {
+        return true;
+    }
+    
+    var isUserInteractionEnabled: Bool {
+        return true;
+    }
+    
+    var transitionDuration: Double {
+        return 0.5
+    }
 }

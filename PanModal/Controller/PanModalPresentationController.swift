@@ -260,13 +260,13 @@ public extension PanModalPresentationController {
         guard presentable?.shouldTransition(to: state) == true
             else { return }
 
-        presentable?.willTransition(to: state)
+        presentable?.willTransition(to: state, on: self.presentedView.frame.minY)
 
         switch state {
         case .shortForm:
-            snap(toYPosition: shortFormYPosition)
+            snap(toYPosition: shortFormYPosition, for: state)
         case .longForm:
-            snap(toYPosition: longFormYPosition)
+            snap(toYPosition: longFormYPosition, for: state)
         }
     }
 
@@ -524,7 +524,7 @@ private extension PanModalPresentationController {
              If presentedView is translated above the longForm threshold, treat as transition
              */
             if presentedView.frame.origin.y == anchoredYPosition && extendsPanScrolling {
-                presentable?.willTransition(to: .longForm)
+                presentable?.willTransition(to: .longForm, on: self.presentedView.frame.minY)
             }
 
         default:
@@ -667,12 +667,15 @@ private extension PanModalPresentationController {
         return (abs(velocity) - (1000 * (1 - Constants.snapMovementSensitivity))) > 0
     }
 
-    func snap(toYPosition yPos: CGFloat) {
+    func snap(toYPosition yPos: CGFloat, for state: PresentationState) {
         PanModalAnimator.animate({ [weak self] in
             self?.adjust(toYPosition: yPos)
             self?.isPresentedViewAnimating = true
         }, config: presentable) { [weak self] didComplete in
             self?.isPresentedViewAnimating = !didComplete
+            if didComplete {
+                self?.presentable?.didTransition(to: state, on: self!.presentedView.frame.minY)
+            }
         }
     }
 
@@ -833,7 +836,7 @@ private extension PanModalPresentationController {
             presentedView.frame.origin.y = longFormYPosition - yOffset
         } else {
             scrollViewYOffset = 0
-            snap(toYPosition: longFormYPosition)
+            snap(toYPosition: longFormYPosition, for: .longForm)
         }
 
         scrollView.showsVerticalScrollIndicator = false

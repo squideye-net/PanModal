@@ -117,7 +117,11 @@ public extension PanModalPresentable where Self: UIViewController {
         return false
     }
 
-    func willTransition(to state: PanModalPresentationController.PresentationState) {
+    func willTransition(to state: PanModalPresentationController.PresentationState, on yPos: CGFloat) {
+
+    }
+
+    func didTransition(to state: PanModalPresentationController.PresentationState, on yPos: CGFloat) {
 
     }
 

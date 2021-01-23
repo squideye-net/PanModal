@@ -96,7 +96,7 @@ extension PanModalPresentable where Self: UIViewController {
         case .maxHeightWithTopInset(let inset):
             return inset
         case .contentHeight(let height):
-            return bottomYPos - (height + bottomLayoutOffset)
+            return bottomYPos - (height + bottomLayoutOffset)            
         case .contentHeightIgnoringSafeArea(let height):
             return bottomYPos - height
         case .intrinsicHeight:
